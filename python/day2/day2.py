@@ -1,9 +1,10 @@
 from collections import defaultdict
 import functools
 import operator
+from pathlib import Path
 
-# INPUT = "day2/day2_example.txt"
-INPUT = "day2/day2.txt"
+INPUT = Path(__file__).parent / "day2_example.txt"
+# INPUT = Path(__file__).parent / "day2.txt"
 
 def checkGame(rounds, maxVal) -> int:
     [gameId, rounds] = rounds.split(": ")
