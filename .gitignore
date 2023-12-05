@@ -1,5 +1,5 @@
 __pycache__
 .vscode
-*.txt
+**/*.txt
 .swiftpm
 .DS_Store
