@@ -1,6 +1,8 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
+import Foundation
+
 @main
 struct Day0 {
   static func main() {
@@ -10,10 +12,10 @@ struct Day0 {
   }
 
   static func part1(data: [String]) -> Int {
-
+      0
   }
 
   static func part2(data: [String]) -> Int {
-
+      0
   }
 }
