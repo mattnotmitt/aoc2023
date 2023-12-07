@@ -12,10 +12,10 @@ struct Day0 {
   }
 
   static func part1(data: [String]) -> Int {
-      0
+    0
   }
 
   static func part2(data: [String]) -> Int {
-      0
+    0
   }
 }
