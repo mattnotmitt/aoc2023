@@ -21,14 +21,14 @@ let package = Package(
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
     // Targets can depend on other targets in this package and products from dependencies.
-//    .executableTarget(
-//      name: "day0",
-//      dependencies: dependencies,
-//      resources: [
-//        .process("day0.txt"),
-//        .process("day0_example.txt")
-//      ]
-//    ),
+    .executableTarget(
+      name: "day0",
+      dependencies: dependencies,
+      resources: [
+        .process("day0.txt"),
+        .process("day0_example.txt")
+      ]
+    ),
     .target(
       name: "AOCUtils",
       dependencies: [
@@ -59,8 +59,7 @@ let package = Package(
       name: "day8",
       dependencies: dependencies,
       resources: [
-        .process("day8.txt"),
-        .process("day8_example.txt")
+        .process("day8.txt")
       ]
     ),
   ]

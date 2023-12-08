@@ -5,11 +5,11 @@ import Foundation
 import Parsing
 
 struct PuzzleData {
-  var num: Int
+  var str: String
   var num2: Int
 
-  init(num: Int, num2: Int) {
-    self.num = num
+  init(str: String, num2: Int) {
+    self.str = str
     self.num2 = num2
   }
 }
@@ -25,10 +25,8 @@ struct Day0 {
       in: .newlines)
 
     // Parsing
-    let dataParser = Parse.init(input: Substring.self) {
-      PuzzleData(num: $0, num2: $1)
-    } with: {
-      Int.parser()
+    let dataParser: some Parser<Substring, PuzzleData> = Parse(PuzzleData.init) {
+      Prefix(3).map(String.init)
       " "
       Int.parser()
     }
