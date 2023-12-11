@@ -72,5 +72,14 @@ let package = Package(
         .process("day9_example.txt")
       ]
     ),
+    .executableTarget(
+      name: "day10",
+      dependencies: dependencies,
+      resources: [
+        .process("day10.txt"),
+        .process("day10_example.txt"),
+        .process("day10_example2.txt")
+      ]
+    ),
   ]
 )
