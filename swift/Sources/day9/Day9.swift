@@ -1,9 +1,9 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
+import Algorithms
 import Foundation
 import Parsing
-import Algorithms
 
 struct OasisData {
   var sequence: [Int]
@@ -11,27 +11,27 @@ struct OasisData {
   init(sequence: [Int]) {
     self.sequence = sequence
   }
-  
+
   func extrapolateSequenceForward() -> [Int] {
     var allSeqs = [sequence]
     while !allSeqs.last!.allSatisfy({ $0 == 0 }) {
-      allSeqs.append(allSeqs.last!.adjacentPairs().map{$1 - $0})
+      allSeqs.append(allSeqs.last!.adjacentPairs().map { $1 - $0 })
     }
     var revSeqs = Array(allSeqs.dropLast().reversed())
-    for i in 0..<(revSeqs.count-1) {
-      revSeqs[i+1].append(revSeqs[i+1].last! + revSeqs[i].last!)
+    for i in 0..<(revSeqs.count - 1) {
+      revSeqs[i + 1].append(revSeqs[i + 1].last! + revSeqs[i].last!)
     }
     return revSeqs.last!
   }
-  
+
   func extrapolateSequenceBackward() -> [Int] {
     var allSeqs = [sequence]
     while !allSeqs.last!.allSatisfy({ $0 == 0 }) {
-      allSeqs.append(allSeqs.last!.adjacentPairs().map{$1 - $0})
+      allSeqs.append(allSeqs.last!.adjacentPairs().map { $1 - $0 })
     }
     var revSeqs = Array(allSeqs.dropLast().reversed())
-    for i in 0..<(revSeqs.count-1) {
-      revSeqs[i+1].prepend(revSeqs[i+1].first! - revSeqs[i].first!)
+    for i in 0..<(revSeqs.count - 1) {
+      revSeqs[i + 1].prepend(revSeqs[i + 1].first! - revSeqs[i].first!)
     }
     return revSeqs.last!
   }
@@ -64,10 +64,10 @@ struct Day9 {
   }
 
   static func part1(data: [OasisData]) -> Int {
-    data.map{$0.extrapolateSequenceForward().last!}.reduce(0, +)
+    data.map { $0.extrapolateSequenceForward().last! }.reduce(0, +)
   }
 
   static func part2(data: [OasisData]) -> Int {
-    data.map{$0.extrapolateSequenceBackward().first!}.reduce(0, +)
+    data.map { $0.extrapolateSequenceBackward().first! }.reduce(0, +)
   }
 }

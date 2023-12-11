@@ -37,10 +37,11 @@ struct Tile {
 struct Day10 {
   static func main() {
     let grid = try! String(
-      contentsOf: Bundle.module.url(forResource: "day10", withExtension: "txt")!)
-      .trimmingCharacters(in: .newlines)
-      .components(separatedBy: "\n")
-      .map { Array($0) }
+      contentsOf: Bundle.module.url(forResource: "day10", withExtension: "txt")!
+    )
+    .trimmingCharacters(in: .newlines)
+    .components(separatedBy: "\n")
+    .map { Array($0) }
 
     let path = findPath(grid: grid)
     print("part1: \(part1(path: path))")
@@ -55,7 +56,8 @@ struct Day10 {
       .map { Point(Int($0) / gridWidth, Int($0) % gridWidth) }!
     var path: [Tile] = []
     for (point, pipe) in [
-      (Point(start.x + 1, start.y), "|"), (Point(start.x - 1, start.y), "|"), (Point(start.x, start.y + 1), "-"),
+      (Point(start.x + 1, start.y), "|"), (Point(start.x - 1, start.y), "|"),
+      (Point(start.x, start.y + 1), "-"),
       (Point(start.x, start.y - 1), "-"),
     ] {
       if grid[point.x][point.y] == pipe.first! {
@@ -74,7 +76,7 @@ struct Day10 {
           step: path.last!.step + 1
         ))
     }
-    
+
     // 'S' should have step 0
     path[path.count - 1].step = 0
 
@@ -87,7 +89,7 @@ struct Day10 {
 
   static func part2(path: [Tile], gridDimensions: (Int, Int)) -> Int {
     let pathByPoint = path.reduce(into: [Point: Tile]()) { $0[$1.point] = $1 }
-    
+
     // nonzero winding rule
     // https://en.wikipedia.org/wiki/Nonzero-rule
     var enclosedTiles = 0
@@ -99,7 +101,7 @@ struct Day10 {
       for y in 0...gridDimensions.1 {
         if let tile = pathByPoint[Point(x, y)] {
           // if it's on the path, check if we can find out the direction
-          if let tileBelow = pathByPoint[Point(x+1, y)] {
+          if let tileBelow = pathByPoint[Point(x + 1, y)] {
             if tile.prev == tileBelow.point {
               // clockwise
               windingNumber += 1
