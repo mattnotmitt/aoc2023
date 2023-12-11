@@ -5,6 +5,7 @@ import PackageDescription
 
 let dependencies: [Target.Dependency] = [
   .product(name: "Parsing", package: "swift-parsing"),
+  .product(name: "Algorithms", package: "swift-algorithms"),
   "AOCUtils"
 ]
 
@@ -17,6 +18,7 @@ let package = Package(
     .package(url: "https://github.com/pointfreeco/swift-parsing", .upToNextMajor(from: "0.7.0")),
     .package(url: "https://github.com/apple/swift-format.git", .upToNextMajor(from: "509.0.0")),
     .package(url: "https://github.com/apple/swift-numerics", revision: "1883189"),
+    .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0"),
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -60,6 +62,14 @@ let package = Package(
       dependencies: dependencies,
       resources: [
         .process("day8.txt")
+      ]
+    ),
+    .executableTarget(
+      name: "day9",
+      dependencies: dependencies,
+      resources: [
+        .process("day9.txt"),
+        .process("day9_example.txt")
       ]
     ),
   ]
