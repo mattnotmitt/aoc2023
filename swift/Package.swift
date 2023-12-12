@@ -89,5 +89,12 @@ let package = Package(
         .process("day11_example.txt")
       ]
     ),
+    .executableTarget(
+      name: "day12",
+      resources: [
+        .process("day12.txt"),
+        .process("day12_example.txt")
+      ]
+    ),
   ]
 )
