@@ -3,18 +3,70 @@
 
 import Foundation
 
-struct Day12Data {
+struct CacheKey: Hashable {
+  init(_ rest: String, _ pattern: [Int], _ groupCount: Int) {
+    self.rest = rest
+    self.pattern = pattern
+    self.groupCount = groupCount
+  }
 
+  var rest: String
+  var pattern: [Int]
+  var groupCount: Int
+}
+
+struct MemoisedSolutionSolver {
+  var cache = [CacheKey: Int]()
+  var cacheHits = 0
+  var cacheMisses = 0
+
+  mutating func countSolutions(rest: String, pattern: [Int], groupCount: Int) -> Int {
+    let cacheKey = CacheKey(rest, pattern, groupCount)
+
+    if let res = cache[cacheKey] {
+      return res
+    }
+
+    // if we're at the end of the string, check if everything is finished
+    if rest.isEmpty {
+      return (groupCount == 0 && pattern.isEmpty) ? 1 : 0
+    }
+
+    var solutions = 0
+
+    for char in rest.first == "?" ? ["#", "."] : [rest.first!] {
+      if char == "#" {
+        // if group is still valid
+        if groupCount < pattern.first ?? 0 {
+          solutions += countSolutions(
+            rest: String(rest.dropFirst()), pattern: pattern, groupCount: groupCount + 1)
+        }
+        // if char == "." and still in damaged group
+      } else if groupCount > 0 {
+        // and the group matches the current group in the provided patterns
+        if !pattern.isEmpty && groupCount == pattern.first! {
+          solutions += countSolutions(
+            rest: String(rest.dropFirst()), pattern: Array(pattern.dropFirst()), groupCount: 0)
+        }
+        // if nothing interesting, continue
+      } else {
+        solutions += countSolutions(rest: String(rest.dropFirst()), pattern: pattern, groupCount: 0)
+      }
+    }
+
+    cache[cacheKey] = solutions
+    return solutions
+  }
 }
 
 @main
 struct Day12 {
   static func main() {
     let data = try! String(
-      contentsOf: Bundle.module.url(forResource: "day12_example", withExtension: "txt")!
-    ).trimmingCharacters(
-      in: .newlines
-    ).components(separatedBy: .newlines)
+      contentsOf: Bundle.module.url(forResource: "day12", withExtension: "txt")!
+    )
+    .trimmingCharacters(in: .newlines)
+    .components(separatedBy: .newlines)
 
     let rows: [(String, [Int])] = data.map {
       let parts = $0.components(separatedBy: " ")
@@ -25,64 +77,22 @@ struct Day12 {
     print("part2: \(part2(rows: rows))")
   }
 
-  static func isValidArrangement(_ record: String, _ pattern: [Int]) -> Bool {
-    var queue = String(record)
-    var recordPattern = [Int]()
-    var currCount = 0
-
-    while queue.count > 0 && queue.first != "?" {
-      if "#" == queue.removeFirst() {
-        currCount += 1
-      } else if currCount > 0 {
-        recordPattern.append(currCount)
-        currCount = 0
-      }
-    }
-
-    if currCount != 0 {
-      recordPattern.append(currCount)
-    }
-
-    if recordPattern == pattern || (recordPattern.isEmpty && !queue.isEmpty) {
-      return true
-    } else if queue.count == 0 || recordPattern.count > pattern.count {
-      return false
-    } else {
-      return !queue.isEmpty
-        && recordPattern.dropLast() == pattern.prefix(upTo: recordPattern.count - 1)
-        && recordPattern.last! <= pattern[recordPattern.count - 1]
-    }
-  }
-
-  static func generateArrangementsAndCheck(_ record: String, _ pattern: [Int]) -> Int {
-    if isValidArrangement(record, pattern) {
-      if record.allSatisfy({ $0 != "?" }) {
-        return 1
-      } else {
-        let qmark = record.dropFirst().firstIndex(of: "?")!
-        var rec = String(record)
-        rec.replaceSubrange(qmark...qmark, with: ".")
-        let sum = generateArrangementsAndCheck(rec, pattern)
-        rec.replaceSubrange(qmark...qmark, with: "#")
-        return sum + generateArrangementsAndCheck(rec, pattern)
-      }
-    } else {
-      return 0
-    }
-  }
-
   static func part1(rows: [(String, [Int])]) -> Int {
-    rows.enumerated().map { (i, row) in
-      return generateArrangementsAndCheck(row.0, row.1)
+    var solver = MemoisedSolutionSolver()
+    return rows.enumerated().map { (i, row) in
+      // add a working spring at the end to finish the groups
+      solver.countSolutions(rest: row.0 + ".", pattern: row.1, groupCount: 0)
     }.reduce(0, +)
   }
 
   static func part2(rows: [(String, [Int])]) -> Int {
-    rows.enumerated().map { (i, row) in
-      var record = Array(repeating: row.0, count: 5).joined(separator: "?")
-      var pattern = Array(Array(repeating: row.1, count: 5).joined())
-      print(i)
-      return generateArrangementsAndCheck(record, pattern)
+    var solver = MemoisedSolutionSolver()
+    return rows.enumerated().map { (i, row) in
+      solver.countSolutions(
+        rest: Array(repeating: row.0, count: 5).joined(separator: "?") + ".",
+        pattern: Array(Array(repeating: row.1, count: 5).joined()),
+        groupCount: 0
+      )
     }.reduce(0, +)
   }
 }
