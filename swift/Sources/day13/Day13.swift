@@ -16,8 +16,8 @@ struct Day13 {
       $0.components(separatedBy: "\n").map { Array($0) }
     }
 
-    print("part1: \(part1(data: data))")
-    print("part2: \(part2(data: data))")
+    print("part1: \(part1(patterns: data))")
+    print("part2: \(part2(patterns: data))")
   }
 
   static func hammingDistance(s1: [Character], s2: [Character]) -> Int {
@@ -29,6 +29,7 @@ struct Day13 {
     for (low, high) in (0..<pattern.count).adjacentPairs() {
       var isValid = true
       var distances = [Int]()
+
       for i in 0...min(low, pattern.count - 1 - high) {
         distances.append(hammingDistance(s1: pattern[low - i], s2: pattern[high + i]))
         if distances.last! > maxSmudges {
@@ -36,6 +37,7 @@ struct Day13 {
           break
         }
       }
+
       if isValid && distances.reduce(0, +) == maxSmudges {
         mirror = high
         break
@@ -44,16 +46,15 @@ struct Day13 {
     return mirror
   }
 
-  static func part1(data: [[[Character]]]) -> Int {
-    data.map { pattern in
-      findMirror(in: pattern) * 100 + findMirror(in: transpose(pattern))
+  static func part1(patterns: [[[Character]]]) -> Int {
+    patterns.map {
+      findMirror(in: $0) * 100 + findMirror(in: transpose($0))
     }.reduce(0, +)
   }
 
-  static func part2(data: [[[Character]]]) -> Int {
-    data.map { pattern in
-      findMirror(in: pattern, maxSmudges: 1) * 100
-        + findMirror(in: transpose(pattern), maxSmudges: 1)
+  static func part2(patterns: [[[Character]]]) -> Int {
+    patterns.map {
+      findMirror(in: $0, maxSmudges: 1) * 100 + findMirror(in: transpose($0), maxSmudges: 1)
     }.reduce(0, +)
   }
 }
