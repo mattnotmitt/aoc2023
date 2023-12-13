@@ -96,5 +96,16 @@ let package = Package(
         .process("day12_example.txt")
       ]
     ),
+    .executableTarget(
+      name: "day13",
+      dependencies: [
+        .product(name: "Algorithms", package: "swift-algorithms"),
+        "AOCUtils"
+      ],
+      resources: [
+        .process("day13.txt"),
+        .process("day13_example.txt")
+      ]
+    ),
   ]
 )
