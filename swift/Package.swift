@@ -107,5 +107,15 @@ let package = Package(
         .process("day13_example.txt")
       ]
     ),
+    .executableTarget(
+      name: "day14",
+      dependencies: [
+        "AOCUtils"
+      ],
+      resources: [
+        .process("day14.txt"),
+        .process("day14_example.txt")
+      ]
+    ),
   ]
 )

@@ -30,8 +30,10 @@ struct Day13 {
       var isValid = true
       var distances = [Int]()
 
-      for i in 0...min(low, pattern.count - 1 - high) {
-        distances.append(hammingDistance(s1: pattern[low - i], s2: pattern[high + i]))
+      for (nextLow, nextHigh) in zip(
+        pattern.prefix(through: low).reversed(), pattern.suffix(from: high))
+      {
+        distances.append(hammingDistance(s1: nextLow, s2: nextHigh))
         if distances.last! > maxSmudges {
           isValid = false
           break

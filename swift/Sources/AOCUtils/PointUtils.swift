@@ -1,4 +1,4 @@
-public struct Point: Hashable {
+public struct Point: Hashable, Comparable {
   public var x: Int
   public var y: Int
 
@@ -8,19 +8,23 @@ public struct Point: Hashable {
   }
 
   public func flipped() -> Point {
-    return Point(y, x)
+    Point(y, x)
   }
 
   public static func + (left: Point, right: Point) -> Point {
-    return Point(left.x + right.x, left.y + right.y)
+    Point(left.x + right.x, left.y + right.y)
   }
 
   public static func - (left: Point, right: Point) -> Point {
-    return Point(left.x - right.x, left.y - right.y)
+    Point(left.x - right.x, left.y - right.y)
+  }
+
+  public static func < (lhs: Point, rhs: Point) -> Bool {
+    lhs.x * 1000 + lhs.y < rhs.x * 1000 + rhs.y
   }
 
   public func abs() -> Point {
-    return Point(Swift.abs(x), Swift.abs(y))
+    Point(Swift.abs(x), Swift.abs(y))
   }
 
   public func manhattanDistance(to: Point) -> Int {
