@@ -18,7 +18,8 @@ let package = Package(
     .package(url: "https://github.com/pointfreeco/swift-parsing", .upToNextMajor(from: "0.7.0")),
     .package(url: "https://github.com/apple/swift-format.git", .upToNextMajor(from: "509.0.0")),
     .package(url: "https://github.com/apple/swift-numerics", revision: "1883189"),
-    .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0")
+    .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0"),
+    .package(url: "https://github.com/apple/swift-collections", .upToNextMajor(from: "1.0.5"))
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -115,6 +116,16 @@ let package = Package(
       resources: [
         .process("day14.txt"),
         .process("day14_example.txt")
+      ]
+    ),
+    .executableTarget(
+      name: "day15",
+      dependencies: [
+        .product(name: "Collections", package: "swift-collections"),
+      ],
+      resources: [
+        .process("day15.txt"),
+        .process("day15_example.txt")
       ]
     ),
   ]
