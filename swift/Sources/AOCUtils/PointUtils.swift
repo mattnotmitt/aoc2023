@@ -32,3 +32,10 @@ public struct Point: Hashable, Comparable {
     return absDiff.x + absDiff.y
   }
 }
+
+public enum Moves {
+  case n
+  case e
+  case s
+  case w
+}
