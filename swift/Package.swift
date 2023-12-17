@@ -19,7 +19,7 @@ let package = Package(
     .package(url: "https://github.com/apple/swift-format.git", .upToNextMajor(from: "509.0.0")),
     .package(url: "https://github.com/apple/swift-numerics", revision: "1883189"),
     .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0"),
-    .package(url: "https://github.com/apple/swift-collections", .upToNextMajor(from: "1.0.5"))
+    .package(url: "https://github.com/apple/swift-collections", revision: "cc1c037")
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -36,6 +36,7 @@ let package = Package(
       name: "AOCUtils",
       dependencies: [
         .product(name: "Numerics", package: "swift-numerics"),
+        .product(name: "Collections", package: "swift-collections")
       ]
     ),
     .executableTarget(
@@ -146,6 +147,16 @@ let package = Package(
       resources: [
         .process("day16.txt"),
         .process("day16_example.txt")
+      ]
+    ),
+    .executableTarget(
+      name: "day17",
+      dependencies: [
+        "AOCUtils"
+      ],
+      resources: [
+        .process("day17.txt"),
+        .process("day17_example.txt")
       ]
     ),
   ]

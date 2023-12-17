@@ -31,11 +31,37 @@ public struct Point: Hashable, Comparable {
     let absDiff = (self - to).abs()
     return absDiff.x + absDiff.y
   }
+  
+  public func move(dir: Direction) -> Point {
+    switch dir {
+    case .n:
+      return self + Point(-1, 0)
+    case .e:
+      return self + Point(0, 1)
+    case .s:
+      return self + Point(1, 0)
+    case .w:
+      return self + Point(0, -1)
+    }
+  }
 }
 
-public enum Moves {
+public enum Direction {
   case n
   case e
   case s
   case w
+  
+  public func flipped() -> Direction {
+    switch self {
+    case .n:
+      return .s
+    case .e:
+      return .w
+    case .s:
+      return .n
+    case .w:
+      return .e
+    }
+  }
 }
