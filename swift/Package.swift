@@ -36,7 +36,8 @@ let package = Package(
       name: "AOCUtils",
       dependencies: [
         .product(name: "Numerics", package: "swift-numerics"),
-        .product(name: "Collections", package: "swift-collections")
+        .product(name: "Collections", package: "swift-collections"),
+        .product(name: "Algorithms", package: "swift-algorithms"),
       ]
     ),
     .executableTarget(
@@ -157,6 +158,17 @@ let package = Package(
       resources: [
         .process("day17.txt"),
         .process("day17_example.txt")
+      ]
+    ),
+    .executableTarget(
+      name: "day18",
+      dependencies: [
+        "AOCUtils",
+        .product(name: "Parsing", package: "swift-parsing"),
+      ],
+      resources: [
+        .process("day18.txt"),
+        .process("day18_example.txt")
       ]
     ),
   ]
