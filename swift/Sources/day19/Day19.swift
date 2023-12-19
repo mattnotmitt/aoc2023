@@ -4,10 +4,37 @@
 import Foundation
 import Parsing
 
-enum Operation: String {
-  case gt = ">"
-  case lt = "<"
-  case err = "X"
+struct PuzzleData {
+  var workflows: [String: Workflow]
+  var ratings: [Rating]
+
+  init(workflows: [Workflow], ratings: [Rating]) {
+    self.workflows = workflows.reduce(into: [String: Workflow]()) {
+      $0[$1.name] = $1
+    }
+    self.ratings = ratings
+  }
+}
+
+struct Workflow {
+  var name: String
+  var rules: [Rule]
+  var fallthroughWorkflow: String
+
+  init(name: String, rules: [Rule], defaultWorkflow: String) {
+    self.name = name
+    self.rules = rules
+    self.fallthroughWorkflow = defaultWorkflow
+  }
+
+  func evaluate(_ rating: Rating) -> String {
+    for rule in rules {
+      if let workflow = rule.evaluate(rating) {
+        return workflow
+      }
+    }
+    return fallthroughWorkflow
+  }
 }
 
 struct Rule {
@@ -37,28 +64,14 @@ struct Rule {
     case .lt: return targetValue < value ? workflow : nil
     case .err: assert(false, "Shouldn't ever get here")
     }
+    return ""
   }
 }
 
-struct Workflow {
-  var name: String
-  var rules: [Rule]
-  var fallthroughWorkflow: String
-
-  init(name: String, rules: [Rule], defaultWorkflow: String) {
-    self.name = name
-    self.rules = rules
-    self.fallthroughWorkflow = defaultWorkflow
-  }
-
-  func evaluate(_ rating: Rating) -> String {
-    for rule in rules {
-      if let workflow = rule.evaluate(rating) {
-        return workflow
-      }
-    }
-    return fallthroughWorkflow
-  }
+enum Operation: String {
+  case gt = ">"
+  case lt = "<"
+  case err = "X"
 }
 
 struct Rating {
@@ -69,18 +82,6 @@ struct Rating {
 
   func sum() -> Int {
     x + m + a + s
-  }
-}
-
-struct PuzzleData {
-  var workflows: [String: Workflow]
-  var ratings: [Rating]
-
-  init(workflows: [Workflow], ratings: [Rating]) {
-    self.workflows = workflows.reduce(into: [String: Workflow]()) {
-      $0[$1.name] = $1
-    }
-    self.ratings = ratings
   }
 }
 
@@ -156,8 +157,8 @@ struct Day19 {
     }
   }
 
-  static func evaluateOnRanges(
-    workflows: inout [String: Workflow], curr: String, ranges: [String: Range<Int>]
+  static func evaluate(
+    workflows: inout [String: Workflow], at curr: String, ranges: [String: Range<Int>]
   ) -> Int {
     // End state
     if curr == "A" {
@@ -170,50 +171,33 @@ struct Day19 {
     var fallthroughRanges = ranges
 
     for rule in workflows[curr]!.rules {
-      // if we're parsing multiple rules we use the fallthrough ranges form the previous rule
+      // if we're checking multiple rules we use the fallthrough ranges from the previous rule
       var passRanges = fallthroughRanges
       switch rule.operation {
       case .gt:
-        if passRanges[rule.target]!.contains(rule.value + 1) {
-          passRanges[rule.target] = rule.value + 1..<passRanges[rule.target]!.upperBound
-        } else if rule.value > passRanges[rule.target]!.upperBound {
-          passRanges[rule.target] = 0..<0
-        }
-
-        if fallthroughRanges[rule.target]!.contains(rule.value + 1) {
-          fallthroughRanges[rule.target] =
-            fallthroughRanges[rule.target]!.lowerBound..<rule.value + 1
-        } else if fallthroughRanges[rule.target]!.lowerBound > rule.value + 1 {
-          fallthroughRanges[rule.target] = 0..<0
-        }
+        passRanges[rule.target] = passRanges[rule.target]!.clamped(to: rule.value + 1..<4001)
+        fallthroughRanges[rule.target] = fallthroughRanges[rule.target]!.clamped(
+          to: 1..<rule.value + 1)
       case .lt:
-        if passRanges[rule.target]!.contains(rule.value) {
-          passRanges[rule.target] = passRanges[rule.target]!.lowerBound..<rule.value
-        } else if passRanges[rule.target]!.lowerBound > rule.value {
-          passRanges[rule.target] = 0..<0
-        }
-
-        if fallthroughRanges[rule.target]!.contains(rule.value) {
-          fallthroughRanges[rule.target] = rule.value..<fallthroughRanges[rule.target]!.upperBound
-        } else if rule.value > fallthroughRanges[rule.target]!.upperBound {
-          fallthroughRanges[rule.target] = 0..<0
-        }
+        passRanges[rule.target] = passRanges[rule.target]!.clamped(to: 1..<rule.value)
+        fallthroughRanges[rule.target] = fallthroughRanges[rule.target]!.clamped(
+          to: rule.value..<4001)
       case .err: assert(false, "Shouldn't ever get here")
       }
       // evaluate pass state of this rule
-      combinations += evaluateOnRanges(
-        workflows: &workflows, curr: rule.workflow, ranges: passRanges)
+      combinations += evaluate(
+        workflows: &workflows, at: rule.workflow, ranges: passRanges)
     }
     // evaluate fallthrough of this workflow
-    combinations += evaluateOnRanges(
-      workflows: &workflows, curr: workflows[curr]!.fallthroughWorkflow, ranges: fallthroughRanges)
+    combinations += evaluate(
+      workflows: &workflows, at: workflows[curr]!.fallthroughWorkflow, ranges: fallthroughRanges)
     return combinations
   }
 
   static func part2(workflows _workflows: [String: Workflow]) -> Int {
     var workflows = _workflows
-    return evaluateOnRanges(
-      workflows: &workflows, curr: "in",
+    return evaluate(
+      workflows: &workflows, at: "in",
       ranges: [
         "x": Range(1...4000),
         "m": Range(1...4000),
