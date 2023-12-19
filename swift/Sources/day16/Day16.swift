@@ -24,12 +24,12 @@ struct Day16 {
     while unprocessedRays.count > 0 {
       var ray = unprocessedRays.removeFirst()
       var rayExplored = false
-      
+
       while ray.loc.x >= 0 && ray.loc.x < grid.count
         && ray.loc.y >= 0 && ray.loc.y < grid.first!.count
       {
         energised.append(ray.loc)
-        
+
         switch grid[ray.loc.x][ray.loc.y] {
         case "\\":
           ray.dir = ray.dir.flipped()

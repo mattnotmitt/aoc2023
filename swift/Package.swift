@@ -1,4 +1,4 @@
-// swift-tools-version: 5.8
+// swift-tools-version: 5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -141,16 +141,6 @@ let package = Package(
       ]
     ),
     .executableTarget(
-      name: "day16memoised",
-      dependencies: [
-        "AOCUtils"
-      ],
-      resources: [
-        .process("day16.txt"),
-        .process("day16_example.txt")
-      ]
-    ),
-    .executableTarget(
       name: "day17",
       dependencies: [
         "AOCUtils"
@@ -169,6 +159,17 @@ let package = Package(
       resources: [
         .process("day18.txt"),
         .process("day18_example.txt")
+      ]
+    ),
+    .executableTarget(
+      name: "day19",
+      dependencies: [
+        "AOCUtils",
+        .product(name: "Parsing", package: "swift-parsing"),
+      ],
+      resources: [
+        .process("day19.txt"),
+        .process("day19_example.txt")
       ]
     ),
   ]

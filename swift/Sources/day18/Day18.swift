@@ -1,16 +1,16 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
+import AOCUtils
 import Foundation
 import Parsing
-import AOCUtils
 
 struct DigPlanStep {
   var direction: Direction
   var count: Int
   var direction2: Direction
   var count2: Int
-  
+
   init(dirStr: String, count: Int, colourCode: String) {
     switch dirStr {
     case "U": direction = .n
@@ -65,7 +65,7 @@ struct Day18 {
 
   static func part1(data: [DigPlanStep]) -> Int {
     var perimeter = 0
-    let allDigVertices = data.reduce(into: [Point(0,0)]) {
+    let allDigVertices = data.reduce(into: [Point(0, 0)]) {
       perimeter += $1.count
       return $0.append($0.last!.move(dir: $1.direction, count: $1.count))
     }
@@ -75,7 +75,7 @@ struct Day18 {
 
   static func part2(data: [DigPlanStep]) -> Int {
     var perimeter = 0
-    let allDigVertices = data.reduce(into: [Point(0,0)]) {
+    let allDigVertices = data.reduce(into: [Point(0, 0)]) {
       perimeter += $1.count2
       return $0.append($0.last!.move(dir: $1.direction2, count: $1.count2))
     }

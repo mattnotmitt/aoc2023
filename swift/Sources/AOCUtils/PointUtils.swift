@@ -33,7 +33,7 @@ public struct Point: Hashable, Comparable {
     let absDiff = (self - to).abs()
     return absDiff.x + absDiff.y
   }
-  
+
   public func move(dir: Direction, count: Int = 1) -> Point {
     switch dir {
     case .n:
@@ -53,7 +53,7 @@ public enum Direction {
   case e
   case s
   case w
-  
+
   public func flipped() -> Direction {
     switch self {
     case .n:
@@ -68,11 +68,12 @@ public enum Direction {
   }
 }
 
-public extension [Point] {
-  func areaOfPolygon() -> Int {
+extension [Point] {
+  public func areaOfPolygon() -> Int {
     // shoelace formula
-    abs(self.adjacentPairs().reduce(0) {
-      $0 + (($1.0.x * $1.1.y) - ($1.1.x * $1.0.y))
-    }) / 2
+    abs(
+      self.adjacentPairs().reduce(0) {
+        $0 + (($1.0.x * $1.1.y) - ($1.1.x * $1.0.y))
+      }) / 2
   }
 }
