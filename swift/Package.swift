@@ -172,5 +172,17 @@ let package = Package(
         .process("day19_example.txt")
       ]
     ),
+    .executableTarget(
+      name: "day20",
+      dependencies: [
+        "AOCUtils",
+        .product(name: "Parsing", package: "swift-parsing"),
+      ],
+      resources: [
+        .process("day20.txt"),
+        .process("day20_example.txt"),
+        .process("day20_example2.txt")
+      ]
+    ),
   ]
 )
