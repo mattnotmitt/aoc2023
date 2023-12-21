@@ -12,14 +12,13 @@ public func lcm(a: Int, b: Int) -> Int {
   return a * b / gcd(a, b)
 }
 
-
 // Taken from here: https://stackoverflow.com/a/59461073
 infix operator %%
 
-public extension Int {
-    static func %% (_ left: Int, _ right: Int) -> Int {
-        if left >= 0 { return left % right }
-        if left >= -right { return (left+right) }
-        return ((left % right)+right)%right
-    }
+extension Int {
+  public static func %% (_ left: Int, _ right: Int) -> Int {
+    if left >= 0 { return left % right }
+    if left >= -right { return (left + right) }
+    return ((left % right) + right) % right
+  }
 }

@@ -155,7 +155,7 @@ struct Day20 {
       var pulses: [Pulse] = [(src: "button", dest: "broadcaster", state: .low)]
       while !pulses.isEmpty {
         let pulse = pulses.removeFirst()
-        //        print("\(pulse.src) -\(pulse.state)-> \(pulse.dest)")
+        // print("\(pulse.src) -\(pulse.state)-> \(pulse.dest)")
         pulseCount.low += pulse.state == .low ? 1 : 0
         pulseCount.high += pulse.state == .high ? 1 : 0
         if modules[pulse.dest] != nil {
