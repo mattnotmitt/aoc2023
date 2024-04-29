@@ -206,6 +206,17 @@ let package = Package(
       ]
     ),
     .executableTarget(
+      name: "Day22Vis",
+      dependencies: [
+        "AOCUtils"
+      ],
+      resources: [
+        .process("Resources"),
+        .process("day22.txt"),
+        .process("day22_example.txt"),
+      ]
+    ),
+    .executableTarget(
       name: "day23",
       dependencies: [
         "AOCUtils"
