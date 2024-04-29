@@ -194,5 +194,37 @@ let package = Package(
         .process("day21_example.txt")
       ]
     ),
+    .executableTarget(
+      name: "day22",
+      dependencies: [
+        "AOCUtils",
+        .product(name: "Parsing", package: "swift-parsing"),
+      ],
+      resources: [
+        .process("day22.txt"),
+        .process("day22_example.txt")
+      ]
+    ),
+    .executableTarget(
+      name: "day23",
+      dependencies: [
+        "AOCUtils"
+      ],
+      resources: [
+        .process("day23.txt"),
+        .process("day23_example.txt")
+      ]
+    ),
+    .executableTarget(
+      name: "day24",
+      dependencies: [
+        "AOCUtils",
+        .product(name: "Parsing", package: "swift-parsing"),
+      ],
+      resources: [
+        .process("day24.txt"),
+        .process("day24_example.txt")
+      ]
+    ),
   ]
 )
